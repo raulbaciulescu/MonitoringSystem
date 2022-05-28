@@ -1,21 +1,44 @@
 package com.monitoringsystem.utils;
 
 
+import com.monitoringsystem.controller.LoggedUser;
+import com.monitoringsystem.model.User;
+import com.monitoringsystem.repository.api.TaskRepository;
 import com.monitoringsystem.repository.api.UserRepository;
+import com.monitoringsystem.repository.impl.TaskRepositoryImpl;
 import com.monitoringsystem.repository.impl.UserRepositoryImpl;
+import com.monitoringsystem.service.api.TaskService;
 import com.monitoringsystem.service.api.UserService;
+import com.monitoringsystem.service.impl.TaskServiceImpl;
 import com.monitoringsystem.service.impl.UserServiceImpl;
 
+import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Resources {
     private static Resources instance = null;
-    private static UserService userService;
-    private static UserRepository userRepo;
+    private final UserService userService;
+    private final TaskService taskService;
+    private final UserRepository userRepo;
+    private final TaskRepository taskRepo;
+    private List<LoggedUser> loggedUsers;
+    private User lastLoggedUser;
 
-    private Resources() throws SQLException {
+    public static Resources getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new Resources();
+        }
+        return instance;
+    }
+
+    private Resources() {
         userRepo = new UserRepositoryImpl();
+        taskRepo = new TaskRepositoryImpl();
         userService = new UserServiceImpl(userRepo);
+        taskService = new TaskServiceImpl(taskRepo);
+        loggedUsers = new ArrayList<>();
     }
 
     public UserService getUserService() {
@@ -26,10 +49,32 @@ public class Resources {
         return userRepo;
     }
 
-    public static Resources getInstance() throws SQLException {
-        if (instance == null) {
-            instance = new Resources();
+    public User getLastLoggedUser() {
+        return lastLoggedUser;
+    }
+
+    public void setLastLoggedUser(User loggedUser) {
+        this.lastLoggedUser = loggedUser;
+    }
+
+    public TaskService getTaskService() {
+        return taskService;
+    }
+
+    public void addUser(LoggedUser loggedUser) {
+        loggedUsers.add(loggedUser);
+    }
+
+    public void deleteUser(LoggedUser loggedUser) {
+        List<LoggedUser> newLoggedUsers = new ArrayList<>();
+        for (LoggedUser user : loggedUsers) {
+            if (!Objects.equals(user.getId(), loggedUser.getId()))
+                newLoggedUsers.add(user);
         }
-        return instance;
+        loggedUsers = newLoggedUsers;
+    }
+
+    public List<LoggedUser> getLoggedUsers() {
+        return loggedUsers;
     }
 }

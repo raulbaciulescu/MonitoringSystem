@@ -27,6 +27,16 @@ public class User extends Entity<Long>{
         setId(0L);
     }
 
+
+    /**
+     * User's constructor
+     * @param id
+     * @param username
+     * @param password
+     * @param firstName
+     * @param lastName
+     * @param role 0 - is employee, 1 - is boss, 2 - is admin
+     */
     public User(Long id, String username,
                 String password, String firstName, String lastName, Integer role) {
         this.setId(id);
@@ -48,9 +58,6 @@ public class User extends Entity<Long>{
         super.setId(aLong);
     }
 
-    public User(Long id) {
-        this.setId(id);
-    }
 
     public String getUsername() {
         return username;

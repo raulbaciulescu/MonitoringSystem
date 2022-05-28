@@ -10,14 +10,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import com.monitoringsystem.repository.impl.UserRepositoryImpl;
 import com.monitoringsystem.service.api.UserService;
-import com.monitoringsystem.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class AdminController implements Initializable {
     @FXML TableView<User> tableView;
@@ -31,9 +32,11 @@ public class AdminController implements Initializable {
     @FXML Button btnDelete;
     private final ObservableList<User> observableList = FXCollections.observableArrayList();
     private final UserService userService;
+    private final User admin;
 
     public AdminController() throws SQLException {
         userService = Resources.getInstance().getUserService();
+        admin = Resources.getInstance().getLastLoggedUser();
     }
 
     @Override
@@ -42,10 +45,13 @@ public class AdminController implements Initializable {
         tableColumnPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
         tableColumnFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         tableColumnLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        tableColumnIsBoss.setCellValueFactory(new PropertyValueFactory<>("isBoss"));
+        tableColumnIsBoss.setCellValueFactory(new PropertyValueFactory<>("role"));
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnId.setVisible(false);
-        observableList.addAll(userService.getUsers());
+        List<User> users = userService.getAll();
+
+        Predicate<User> byRole = user -> user.getRole() != 2;
+        observableList.addAll(users.stream().filter(byRole).collect(Collectors.toList()));
         tableView.setItems(observableList);
     }
 
@@ -55,7 +61,7 @@ public class AdminController implements Initializable {
         tableView.getItems().remove(tableView.getSelectionModel().getSelectedItems().get(0));
     }
 
-    public void onAddBtnClick(MouseEvent mouseEvent) throws IOException {
-        NavController.navigate(Constants.Scene.ADD_USER, mouseEvent);
+    public void onAddBtnClick(MouseEvent mouseEvent) {
+        SceneController.navigateTo(admin.getId(), Constants.Scene.ADD_USER);
     }
 }

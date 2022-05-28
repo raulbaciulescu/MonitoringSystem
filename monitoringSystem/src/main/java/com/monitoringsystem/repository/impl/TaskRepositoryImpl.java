@@ -1,22 +1,24 @@
 package com.monitoringsystem.repository.impl;
 
-
+import com.monitoringsystem.model.Status;
+import com.monitoringsystem.model.Task;
 import com.monitoringsystem.model.User;
+import com.monitoringsystem.repository.api.TaskRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import com.monitoringsystem.repository.api.UserRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class UserRepositoryImpl implements UserRepository {
+public class TaskRepositoryImpl implements TaskRepository {
     private static SessionFactory sessionFactory;
 
-    public UserRepositoryImpl() {
+    public TaskRepositoryImpl() {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         try {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
@@ -34,22 +36,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void add(User user) {
+    public void add(Task task) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.save(user);
+            session.save(task);
             session.getTransaction().commit();
         }
     }
 
     @Override
-    public void update(User entity, User newEntity) {
+    public void update(Task task, Task newTask) {
         //TODO
     }
 
 
     @Override
-    public Optional<User> findByID(Long id) {
+    public Optional<Task> findByID(Long id) {
         return Optional.empty();
     }
 
@@ -59,12 +61,12 @@ public class UserRepositoryImpl implements UserRepository {
             Transaction tx = null;
             try {
                 tx = session.beginTransaction();
-                User user = session.createQuery("from User where id = :id", User.class)
+                Task user = session.createQuery("from Task where id = :id", Task.class)
                         .setParameter("id", id).setMaxResults(1).uniqueResult();
                 session.delete(user);
                 tx.commit();
             } catch (RuntimeException ex) {
-                System.err.println("Eroare la stergere " + ex);
+                System.err.println("Delete error" + ex);
                 if (tx != null)
                     tx.rollback();
             }
@@ -72,28 +74,46 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
-        List<User> result;
+    public List<Task> getAll() {
+        List<Task> result;
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            result = session.createQuery("from User", User.class).list();
+            result = session.createQuery("from Task", Task.class).list();
             session.getTransaction().commit();
         }
         return result;
     }
 
     @Override
-    public Optional<User> findUser(User user) {
+    public List<Task> getSpecificTasks(Long userId) {
+        List<Task> result;
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            String sql = "from User where username = :username and password = :password";
-            List<User> result = session.createQuery(sql, User.class)
-                    .setParameter("username", user.getUsername()).setParameter("password", user.getPassword()).list();
-            for (User userResult :  result) {
-                return Optional.of(userResult);
-            }
+            String sql = "from Task where employeeId = :userId";
+            result = session.createQuery(sql, Task.class).setParameter("userId", userId).list();
             session.getTransaction().commit();
         }
-        return Optional.empty();
+        return result;
     }
+
+    @Override
+    public void finishTask(Long id) {
+        try (Session session = sessionFactory.openSession()){
+            Transaction tx = null;
+            try{
+                tx = session.beginTransaction();
+                Task task = session.load(Task.class, id);
+                task.setStatus(Status.FINISHED);
+                tx.commit();
+
+            } catch (RuntimeException ex) {
+                System.err.println("Update error " + ex);
+                if (tx != null)
+                    tx.rollback();
+            }
+        }
+
+    }
+
+
 }

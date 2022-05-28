@@ -16,12 +16,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.lang.constant.Constable;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Optional;
 
 public class LoginController {
-    @FXML
-    public TextField txtFieldUsername;
+    @FXML public TextField txtFieldUsername;
     @FXML public TextField txtFieldPassword;
     @FXML public Button btnLogin;
     @FXML public Text errors;
@@ -31,18 +32,24 @@ public class LoginController {
         userService = Resources.getInstance().getUserService();
     }
 
-    public void onBtnLoginClicked(MouseEvent mouseEvent) throws IOException {
+    public void onBtnLoginClick(MouseEvent mouseEvent) throws IOException, SQLException {
         String username = txtFieldUsername.getText();
         String password = txtFieldPassword.getText();
         Optional<User> optional = userService.findUser(username, password);
+
         if (optional.isEmpty()) {
-            //errors.setVisible(true);
-            System.out.println("da");
+            errors.setVisible(true);
         } else if (Objects.equals(optional.get().getUsername(), "admin")){
-            NavController.navigate(Constants.Scene.ADMIN, mouseEvent);
+            Resources.getInstance().setLastLoggedUser(optional.get());
+            SceneController sceneController = new SceneController(Constants.Scene.ADMIN, optional.get());
         }
-//        if (Objects.equals(username, "admin") && Objects.equals(password, "admin")) {
-//            NavController.navigate(Constants.Scene.ADMIN, mouseEvent);
-//        }
+        else if (optional.get().getRole() == 1) {
+            Resources.getInstance().setLastLoggedUser(optional.get());
+            SceneController sceneController = new SceneController(Constants.Scene.BOSS, optional.get());
+        }
+        else if (optional.get().getRole() == 0) {
+            Resources.getInstance().setLastLoggedUser(optional.get());
+            SceneController sceneController = new SceneController(Constants.Scene.EMPLOYEE, optional.get());
+        }
     }
 }
