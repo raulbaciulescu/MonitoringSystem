@@ -1,2 +1,5 @@
-package com.monitoringsystem.utils;public class Observer {
+package com.monitoringsystem.utils;
+
+public interface Observer {
+    void update();
 }

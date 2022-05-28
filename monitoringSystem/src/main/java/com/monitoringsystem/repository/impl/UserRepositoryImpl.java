@@ -90,7 +90,7 @@ public class UserRepositoryImpl implements UserRepository {
             List<User> result = session.createQuery(sql, User.class)
                     .setParameter("username", user.getUsername()).setParameter("password", user.getPassword()).list();
             for (User userResult :  result) {
-                return Optional.of(user);
+                return Optional.of(userResult);
             }
             session.getTransaction().commit();
         }

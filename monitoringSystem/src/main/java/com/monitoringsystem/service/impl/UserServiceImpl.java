@@ -1,9 +1,14 @@
 package com.monitoringsystem.service.impl;
 
+import com.monitoringsystem.controller.LoggedUser;
 import com.monitoringsystem.model.User;
 import com.monitoringsystem.repository.api.UserRepository;
 import com.monitoringsystem.service.api.UserService;
+import com.monitoringsystem.utils.Observable;
+import com.monitoringsystem.utils.Resources;
 
+import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -31,11 +36,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String username, String password) {
-        return userRepository.findUser(new User(username, password));
+        Optional<User> optional = userRepository.findUser(new User(username, password));
+        if (optional.isPresent() && optional.get().getRole() == 0) {
+            try {
+                Resources.getInstance().addUser(new LoggedUser(optional.get(), LocalTime.now()));
+                notifyUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return optional;
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<User> getAll() {
         return userRepository.getAll();
+    }
+
+    @Override
+    public void logout() {
+        notifyUpdate();
     }
 }

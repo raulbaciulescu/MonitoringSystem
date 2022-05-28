@@ -1,2 +1,6 @@
-package com.monitoringsystem.model;public enum Status {
+package com.monitoringsystem.model;
+
+public enum Status {
+    FINISHED,
+    PENDING
 }

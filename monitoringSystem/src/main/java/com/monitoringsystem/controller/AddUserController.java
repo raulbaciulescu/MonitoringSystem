@@ -1,5 +1,6 @@
 package com.monitoringsystem.controller;
 
+import com.monitoringsystem.model.User;
 import com.monitoringsystem.service.api.UserService;
 import com.monitoringsystem.utils.Constants;
 import com.monitoringsystem.utils.Resources;
@@ -25,13 +26,15 @@ public class AddUserController {
     @FXML public RadioButton radioBtnEmployee;
     @FXML public ToggleGroup group;
     private final UserService userService;
+    private final User admin;
 
     public AddUserController() throws SQLException {
         userService = Resources.getInstance().getUserService();
+        admin = Resources.getInstance().getLastLoggedUser();
     }
 
     public void onBackBtnClick(MouseEvent mouseEvent) throws IOException {
-        NavController.navigate(Constants.Scene.ADMIN, mouseEvent);
+        SceneController.navigateTo(admin.getId(), Constants.Scene.ADMIN);
     }
 
     public void onRegisterBtnClick(MouseEvent mouseEvent) {

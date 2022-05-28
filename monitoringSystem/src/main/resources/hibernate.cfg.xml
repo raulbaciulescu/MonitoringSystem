@@ -15,5 +15,6 @@
         <property name="format_sql">true</property>
 
         <mapping class="com.monitoringsystem.model.User"/>
+        <mapping class="com.monitoringsystem.model.Task"/>
     </session-factory>
 </hibernate-configuration>
