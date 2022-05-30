@@ -17,6 +17,7 @@ public record NavGraphController(Scene scene) {
         put(Constants.Scene.EMPLOYEE, NavResources.urlOf(Constants.Scene.EMPLOYEE));
         put(Constants.Scene.ADMIN, NavResources.urlOf(Constants.Scene.ADMIN));
         put(Constants.Scene.ADD_USER, NavResources.urlOf(Constants.Scene.ADD_USER));
+        put(Constants.Scene.BOSS_TASKS, NavResources.urlOf(Constants.Scene.BOSS_TASKS));
     }};
 
     public void navigateTo(final String resourceFileName) {

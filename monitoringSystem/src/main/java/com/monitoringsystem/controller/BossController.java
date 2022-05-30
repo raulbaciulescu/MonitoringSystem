@@ -31,6 +31,7 @@ public class BossController implements Initializable, Observer {
     @FXML TableColumn<LoggedUser, LocalDate> tableColumnDate;
     @FXML Button btnLogout;
     @FXML Button btnAddTask;
+    @FXML Button btnTasks;
     @FXML TextField txtDescription;
     @FXML public Text errors;
     private TaskService taskService;
@@ -42,7 +43,7 @@ public class BossController implements Initializable, Observer {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            boss = Resources.getInstance().getLastLoggedUser();
+            boss = Resources.getInstance().getBoss();
             tableColumnUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
             tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("loginDate"));
@@ -87,5 +88,15 @@ public class BossController implements Initializable, Observer {
 
     public void onBtnLogoutClick(MouseEvent mouseEvent) {
         SceneController.navigateTo(boss.getId(), Constants.Scene.LOGIN);
+    }
+
+    public void onBtnTasksClick(MouseEvent mouseEvent) throws SQLException {
+        LoggedUser loggedUser = tableView.getSelectionModel().getSelectedItem();
+        if (loggedUser != null) {
+            Resources.getInstance().setLastLoggedUser(loggedUser);
+            Resources.getInstance().setBoss(boss);
+            SceneController.navigateTo(boss.getId(), Constants.Scene.BOSS_TASKS);
+        }
+
     }
 }

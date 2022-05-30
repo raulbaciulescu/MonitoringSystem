@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 
 public class SceneController {
-    public static final HashMap<Long, SceneController> SCENE_CONTROLLERS = new HashMap<>();
+    public static final HashMap<Long, SceneController> sceneControllers = new HashMap<>();
 
     private final Stage stage;
     private final User user;
@@ -32,7 +32,7 @@ public class SceneController {
 
         setSceneAndShowStage();
 
-        SCENE_CONTROLLERS.put(user != null ? user.getId() : null, this);
+        sceneControllers.put(user != null ? user.getId() : null, this);
     }
 
     private void setSceneAndShowStage() {
@@ -50,6 +50,6 @@ public class SceneController {
     }
 
     public static void navigateTo(final Long userId, final String route) {
-        SCENE_CONTROLLERS.get(userId).getNavGraphController().navigateTo(route);
+        sceneControllers.get(userId).getNavGraphController().navigateTo(route);
     }
 }

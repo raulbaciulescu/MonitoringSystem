@@ -25,6 +25,7 @@ public class Resources {
     private final TaskRepository taskRepo;
     private List<LoggedUser> loggedUsers;
     private User lastLoggedUser;
+    private User boss;
 
     public static Resources getInstance() throws SQLException {
         if (instance == null) {
@@ -55,6 +56,14 @@ public class Resources {
 
     public void setLastLoggedUser(User loggedUser) {
         this.lastLoggedUser = loggedUser;
+    }
+
+    public User getBoss() {
+        return boss;
+    }
+
+    public void setBoss(User boss) {
+        this.boss = boss;
     }
 
     public TaskService getTaskService() {

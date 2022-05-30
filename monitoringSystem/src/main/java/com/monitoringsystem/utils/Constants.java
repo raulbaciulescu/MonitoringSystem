@@ -8,5 +8,7 @@ public class Constants {
         public final static String LOGIN = "login-view.fxml";
         public final static String EMPLOYEE = "employee-view.fxml";
         public final static String BOSS = "boss-view.fxml";
+        public final static String BOSS_TASKS = "boss-tasks-view.fxml";
+
     }
 }

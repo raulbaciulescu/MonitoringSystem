@@ -20,6 +20,9 @@ public class LoggedUser extends User {
         this.loginDate = loginDate;
     }
 
+    public User getUser() {
+        return new User(getId(), getUsername(), getPassword(), getFirstName(), getLastName(), getRole());
+    }
 
     public LocalTime getLoginDate() {
         return loginDate;

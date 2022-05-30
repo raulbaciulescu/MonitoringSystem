@@ -45,6 +45,7 @@ public class LoginController {
         }
         else if (optional.get().getRole() == 1) {
             Resources.getInstance().setLastLoggedUser(optional.get());
+            Resources.getInstance().setBoss(optional.get());
             SceneController sceneController = new SceneController(Constants.Scene.BOSS, optional.get());
         }
         else if (optional.get().getRole() == 0) {

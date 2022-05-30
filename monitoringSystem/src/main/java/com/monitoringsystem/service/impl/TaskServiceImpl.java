@@ -41,5 +41,6 @@ public class TaskServiceImpl implements Observable, TaskService {
     @Override
     public void finishTask(Long id) {
         taskRepository.finishTask(id);
+        notifyUpdate();
     }
 }

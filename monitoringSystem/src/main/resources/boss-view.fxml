@@ -25,7 +25,8 @@
       <Button fx:id="btnLogout" layoutX="685.0" layoutY="47.0" mnemonicParsing="false" onMouseClicked="#onBtnLogoutClick" text="Logout" />
       <Button fx:id="btnAddTask" layoutX="229.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#onBtnAddTaskClick" text="Add task" />
       <TextField fx:id="txtDescription" layoutX="60.0" layoutY="392.0" promptText="description" />
-      <Text fx:id="errors" visible="false" fill="#d90e0e" layoutX="60.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You should select an employee!" wrappingWidth="232.53671264648438" />
+      <Text fx:id="errors" fill="#d90e0e" layoutX="60.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You should select an employee!" visible="false" wrappingWidth="232.53671264648438" />
+      <Button fx:id="btnTasks" onMouseClicked="#onBtnTasksClick" layoutX="311.0" layoutY="392.0" mnemonicParsing="false" text="Tasks" />
 
    </children>
 </AnchorPane>
