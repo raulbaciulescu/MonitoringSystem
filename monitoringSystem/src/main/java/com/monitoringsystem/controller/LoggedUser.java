@@ -7,11 +7,20 @@ import java.time.LocalTime;
 
 public class LoggedUser extends User {
     private LocalTime loginDate;
+    private String loginDateString;
 
     public LoggedUser(Long id, String username,
                 String password, String firstName, String lastName, Integer role, LocalTime loginDate) {
         super(id, username, password, firstName, lastName, role);
         this.loginDate = loginDate;
+    }
+
+    public String getLoginDateString() {
+        return loginDateString;
+    }
+
+    public void setLoginDateString(String loginDateString) {
+        this.loginDateString = loginDateString;
     }
 
     public LoggedUser(User user, LocalTime loginDate) {

@@ -46,7 +46,7 @@ public class BossController implements Initializable, Observer {
             boss = Resources.getInstance().getBoss();
             tableColumnUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
             tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-            tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("loginDate"));
+            tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("loginDateString"));
 
             userService = Resources.getInstance().getUserService();
             taskService = Resources.getInstance().getTaskService();

@@ -10,7 +10,6 @@ import java.util.HashMap;
 
 public class SceneController {
     public static final HashMap<Long, SceneController> sceneControllers = new HashMap<>();
-
     private final Stage stage;
     private final User user;
     private final NavGraphController navGraphController;
@@ -29,9 +28,7 @@ public class SceneController {
         final Parent parent = NavResources.load(entryPointRoute);
         final Scene scene = new Scene(parent);
         this.navGraphController = new NavGraphController(scene);
-
         setSceneAndShowStage();
-
         sceneControllers.put(user != null ? user.getId() : null, this);
     }
 

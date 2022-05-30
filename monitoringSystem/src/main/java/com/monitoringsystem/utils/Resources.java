@@ -12,9 +12,8 @@ import com.monitoringsystem.service.api.UserService;
 import com.monitoringsystem.service.impl.TaskServiceImpl;
 import com.monitoringsystem.service.impl.UserServiceImpl;
 
-import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class Resources {
@@ -71,6 +70,7 @@ public class Resources {
     }
 
     public void addUser(LoggedUser loggedUser) {
+        loggedUser.setLoginDateString(DateUtils.stringifyLocalTime(loggedUser.getLoginDate()));
         loggedUsers.add(loggedUser);
     }
 
